@@ -1,0 +1,886 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+  font-family: "Montserrat", sans-serif;
+  // ojo! para que el scroll sea suave, meter esto
+  // en el html. 
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+}
+
+// Reusable Container for Different Sections
+
+.container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-title {
+  font-size: 4rem;
+  font-weight: 300;
+  // color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  text-align: center;
+}
+
+.section-title span {
+  color: crimson;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.cta {
+  // por qué lo ponemos como inline-block?
+  display: inline-block;
+  padding: 10px 30px;
+  color: crimson;
+  background-color: transparent;
+  border: 2px solid crimson;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  margin-top: 30px;
+  transition: 0.3s ease;
+  text-transform: uppercase;
+  transition-property: background-color, color;
+}
+
+.cta:hover {
+  background-color: crimson;
+  color: white;
+}
+
+.brand h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  color: white;
+}
+
+.brand h1 span {
+  color: crimson;
+}
+
+
+// End of Reusable Container for Different Sections
+
+// Header section
+
+#header {
+  position: fixed; 
+  z-index: 1000;
+  left: 0; 
+  top: 0; 
+  width: 100vw; 
+  height: auto;
+  
+}
+
+#header .header{
+  min-height: 8vh; 
+  background-color: rgba(31,30,30,0.24);
+  transition: 1s ease background-color; 
+}
+
+.header .nav-bar{
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  width: 100%; 
+  height: 100%;
+  max-width: 1300px;
+  padding: 0 10px; 
+}
+
+#header .nav-list ul {
+ 
+  list-style: none; 
+  position: absolute; 
+  background-color: rgb(31,30,30);
+  width: 100vw; 
+  height: 100vh; 
+  left: 100%; 
+  top: 0; 
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center; 
+  z-index: 1; 
+  overflow: hidden;
+  transition: .5s ease left; 
+}
+
+#header .nav-list ul.active{
+  left: 0;
+  
+}
+
+#header .nav-list ul a{
+  font-size: 2.5rem; 
+  font-weight: 500; 
+  letter-spacing: .2rem; 
+  text-decoration: none;
+  color: white; 
+  text-transform: uppercase;
+  padding: 20px; 
+  // al meter aquí el display block lo que hacemos es aumentar el
+  // box del elemento y con ello ganamos espacio por arriba y por
+  // abajo (dentro de <li> el elemento es inline block por defecto. 
+  display: block;
+  transition: .5s ease color; 
+}
+
+#header .nav-list ul a::after{
+  content: attr(data-after);
+  // utilizando position absolute, centramos el elemento
+  // con top y left al 50%
+  position: absolute; 
+  top: 50%; 
+  left: 50%;
+  // con el transform sacamos el elemento fuera de la pantalla
+  // y reducimos su escala a 0 para que al hacer hover, 
+  // hagamos un translate con las mismas cifras pero con scale(1)
+  transform: translate(-50%, -50%) scale(0); 
+  color: rgba(240, 248, 255, 0.021); 
+  font-size: 13rem; 
+  letter-spacing: 50px;
+  // colocamos el z-index en -1 para que aparezca detrás del <ul>
+  z-index: -1; 
+  transition: .3s ease letter-spacing; 
+}
+
+#header .nav-list ul li:hover a::after{
+  // aplicamos el hover sobre la totalidad de <li>
+  transform: translate(-50%, -50%) scale(1); 
+  // este letter spacing lo que hace es juntar las letras de nuevo
+  // a su separación inicial (efecto de composición de la string desde 
+  // izquierda y derecha. 
+  letter-spacing: initial; 
+}
+
+#header .nav-list ul li:hover a{
+  color: crimson; 
+}
+
+#header .hamburger{
+  // con esto creamos el circulito.
+  // Por qué aparece en la esquina???? 
+  height: 60px; 
+  width: 60px; 
+  // Por qué le metemos un inline-block????
+  display: inline-block; 
+  border: 3px solid white; 
+  border-radius: 50%;
+  // por qué le metemos un position relative???
+  // si no le ponemos la position, el circulito desaparece 
+  // de la página. 
+  position: relative; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  z-index: 100;
+  cursor: pointer; 
+  transform: scale(0.8);
+  margin-right: 20px; 
+}
+
+#header .hamburger:after{
+  position: absolute; 
+  content: ""; 
+  height: 100%; 
+  width: 100%; 
+  border-radius: 50%; 
+  border: 13px solid white;
+  animation: hamburger_pulse 1.8s ease infinite; 
+}
+
+
+
+#header .hamburger .bar{
+  // con esto creamos el circulito y una barra
+  height: 2px; 
+  width: 30px; 
+  position: relative; 
+  background-color: white; 
+  z-index: -1; 
+}
+
+#header .hamburger .bar::after,
+#header .hamburger .bar::before{
+  // el contenido de estas props es magia :S
+  content: ""; 
+  position: absolute;
+  height: 100%; 
+  width: 100%; 
+  left: 0; 
+  background-color: white;
+  transition: .3s ease; 
+  // qué es esto???? Transition property por qué?
+  transition-property: top, bottom;
+}
+
+#header .hamburger .bar::after{
+  top: 8px; 
+}
+#header .hamburger .bar::before{
+  bottom: 8px; 
+}
+
+#header .hamburger.active .bar::before{
+  bottom: 0; 
+}
+#header .hamburger.active .bar::after {
+
+top: 0; 
+}
+
+// End Header section
+
+
+// Hero Section
+
+#hero {
+  background-image: url(./img/hero-bg.png);
+  background-size: cover;
+  background-position: top center;
+  // ponemos position relative porque tendremos un overlay
+  position: relative;
+  // ponemos el z-index para superponer su contenido al overlay
+  // que oscurece el background
+  z-index: 1;
+}
+// el overlay lo ponemos como un pseudoselector de hero
+
+#hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  opacity: 0.7;
+  background-color: black;
+  width: 100%;
+  // sin el opacity, el overlay lo cubriría todo de negro.
+  // podríamos meter también un background con gradient;
+  //    background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.2));
+  z-index: -1;
+}
+
+#hero .hero {
+  // con esto alineamos el container a la izquierda y siempre quedará así,
+  // ya estemos en desktop o mobile
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 50px;
+  justify-content: flex-start;
+}
+
+#hero h1 {
+  // ponemos block para que ocupe todo su espacio horizontal y vertical
+  display: block;
+  // aquí no sé por qué ponemos fit-content (ajustar el contenedor a su contenido?)
+  width: fit-content;
+  font-size: 4rem;
+  // como vamos a meter el span para el efecto de revelado, necesitamos indicar
+  // que la position es relative (actúa como container de span, que será position
+  // absolute)
+  position: relative;
+  color: transparent;
+  animation: text_reveal 0.5s ease forwards;
+  animation-delay: 1.5s;
+}
+
+#hero h1:nth-child(1) {
+  animation-delay: 1s;
+}
+#hero h1:nth-child(2) {
+  animation-delay: 2s;
+}
+#hero h1:nth-child(3) {
+  animation: text_reveal_name 0.5 ease forwards;
+  animation-delay: 3s;
+}
+
+#hero h1:nth-child(1) span {
+  animation-delay: 0.5s;
+}
+#hero h1:nth-child(2) span {
+  animation-delay: 1.5s;
+}
+#hero h1:nth-child(3) span {
+  animation-delay: 2.5s;
+}
+
+#hero h1 span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: crimson;
+  animation: text_reveal_box 1s ease;
+  animation-delay: 1s;
+}
+
+// End Hero Section
+
+// Services Section
+
+#services .services {
+  // la clase services se hace para utilizar container como setter
+  // general y esta para poner la flex-direction como column.
+  flex-direction: column;
+  text-align: center;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 100px 0;
+}
+
+#services .service-top{
+  width: 500px; 
+  margin: 0 auto;
+}
+#services .service-top p {
+  font-size: 1.4rem;
+  margin-top: 5px;
+  line-height: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05rem;
+}
+
+#services .service-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+
+#services .service-item {
+  // ojo!!! anotar que debo usar más flex-basis frente a width!!!
+  flex-basis: 80%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 10px;
+  background-image: url(./img/img-1.png);
+  background-size: cover;
+  margin: 10px 5px;
+  // ponemos la position "relative" para luego poder meter
+  // el overlay con el ::after
+  position: relative;
+  z-index: 1;
+  // ponemos el overflow aquí para que los border aparezcan
+  // redondeados. El after los ha puesto normales y debemos
+  // corregirlo de esta forma.
+  overflow: hidden;
+}
+
+#services .service-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(60deg, #29323c %0, #485563 100%);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+#services .service-bottom .icon {
+  height: 50px;
+  width: 50px;
+  margin-bottom: 20px;
+}
+
+#services .service-item h2 {
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+#services .service-item p {
+  color: white;
+  text-align: left;
+}
+
+#services .service-bottom .icon img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+// End Services Section
+
+// Projects Section
+
+#projects .projects {
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 0;
+}
+
+#projects .projects-header {
+  margin-bottom: 50px;
+}
+
+#projects .all-projects {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#projects .project-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  // probar flex-basis aquí!!!
+  width: 80%;
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#projects .project-info {
+  padding: 30px;
+  flex-basis: 50%;
+  background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+}
+
+#projects .project-info h1 {
+  font-size: 4rem;
+  font-weight: 500;
+}
+
+#projects .project-info h2 {
+  font-size: 1.8rem;
+  font-size: 500;
+  margin-top: 10px;
+}
+
+#projects .project-info p {
+  color: white;
+}
+
+#projects .project-img {
+  flex-basis: 50%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+#projects .project-img:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: darkblue;
+  opacity: 0.4;
+  transition: 0.4s ease;
+}
+
+#projects .project-img:hover:after {
+  opacity: 0;
+}
+
+#projects .project-item .project-img img {
+  transition: 0.4s ease transform;
+}
+
+#projects .project-item:hover .project-img img {
+  transform: scale(1.2);
+}
+// End Projects Section
+
+// About Section
+
+#about .about {
+  flex-direction: column-reverse;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px;
+}
+
+#about .col-left {
+  width: 250px;
+  height: 360px;
+}
+#about .col-right .about-text {
+  display: flex;
+  justify-content: center;
+}
+
+#about .col-right {
+  width: 100%;
+}
+
+#about .col-right h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: 0.2rem;
+  margin-bottom: 10px;
+}
+
+#about .col-right p {
+  margin-bottom: 20px;
+  text-align: justify;
+  width: 85%;
+}
+
+#about .col-right .cta {
+  margin-bottom: 50px;
+  padding: 10px 20px;
+  font-size: 2rem;
+}
+
+#about .col-left .about-img {
+  // usamos height y width para que el borde cubra completamente
+  // los espacios por los que pasa el :after
+  height: 100%;
+  width: 100%;
+  position: relative;
+  border: 10px solid white;
+}
+
+#about .col-left .about-img::after {
+  content: "";
+  position: absolute;
+  left: -33px;
+  top: 19px;
+  height: 98%;
+  width: 98%;
+  border: 7px solid crimson;
+  z-index: -1;
+}
+
+// End About Section
+
+// Contact Section
+
+#contact .contact {
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#contact .contact-items {
+  width: 400px;
+}
+
+#contact .contact-item {
+  width: 80%;
+  padding: 30px;
+  text-align: center;
+  border-radius: 10px;
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0 #0000002c;
+  flex-direction: column;
+  transition: 0.3s ease box-shadow;
+}
+
+#contact .contact-item:hover {
+  box-shadow: 0px 0px 5px 0 #0000002c;
+}
+
+#contact .icon {
+  width: 70px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+#contact .contact-info h1 {
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+#contact .contact-info h2 {
+  font-size: 1.3rem;
+  line-height: 2rem;
+  font-weight: 500;
+}
+// End Contact Section
+
+// Footer Section
+
+#footer {
+  background-image: linear-gradient(60deg, #29323c, #485463 100%);
+}
+
+#footer .footer {
+  min-height: 200px;
+  flex-direction: column;
+  padding-top: 50px;
+  padding-bottom: 10px;
+}
+
+#footer h2 {
+  color: white;
+  font-weight: 500;
+  font-size: 1.8rem;
+  letter-spacing: 0.1rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#footer .social-icon {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+#footer .social-item img {
+  filter: grayscale(1);
+  transition: 1.9s ease filter;
+}
+#footer .social-item img:hover {
+  filter: none;
+}
+
+#footer .social-item {
+  height: 50px;
+  width: 50px;
+  margin-bottom: 0 5px;
+}
+
+#footer p {
+  color: white;
+  font-size: 1.3rem;
+}
+// End Footer Section
+// KeyFrames
+
+@keyframes text_reveal_box {
+  50% {
+    width: 100%;
+    left: 0;
+  }
+  100% {
+    width: 0;
+    left: 100%;
+  }
+}
+
+@keyframes text_reveal {
+  100% {
+    color: white;
+  }
+}
+
+@keyframes text_reveal_name {
+  100% {
+    color: crimson;
+    font-weight: 500;
+  }
+}
+
+@keyframes hamburger_pulse{
+  0%{
+    opacity: 1; 
+    transform: scale(.1)
+  } 
+  100%{
+    opacity: 0; 
+    transform: scale(1);
+  }
+}
+// End KeyFrames
+
+// media query for tablet (>767px)
+
+@media only screen and (min-width: 768px) {
+  .cta {
+    font-size: 2.5rem;
+    padding: 20px 60px;
+  }
+  h1.section-title {
+    font-size: 6rem;
+  }
+
+  // Hero //
+  #hero h1 {
+    font-size: 7rem;
+  }
+
+  // Services
+
+  #services .service-bottom .service-item {
+    // aquí estamos determinando el espacio que
+    // ocupará cada service-item dentro del container. Dandole
+    // un 45% de width(flex-basis), nos aseguramos de que entren 2
+    // items en la query de tablet.
+    flex-basis: 45%;
+    margin: 2.5%;
+  }
+
+  // Project //
+  #projects .project-item {
+    flex-direction: row;
+    height: 400px;
+    margin: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  #projects .project-item:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+  #projects .all-projects .project-info {
+    height: 100%;
+  }
+
+  #projects .all-projects .project-img {
+    height: 100%;
+  }
+
+  #projects .all-projects .project-info {
+    height: 100%;
+  }
+
+  /* About media query  */
+
+  #about .about {
+    flex-direction: row;
+  }
+  #about .col-left {
+    width: 600px;
+    height: 400px;
+    padding-left: 60px;
+  }
+
+  #about .about .col-left .about-img::after {
+    left: -45px;
+    top: 34px;
+    height: 98%;
+    width: 98%;
+    border: 10px solid crimson;
+  }
+
+  #about .col-right {
+    text-align: justify;
+    padding: 30px;
+  }
+
+  #about .col-right h1 {
+    text-align: left;
+  }
+
+  #about .col-right .about-text {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* End About media query */
+
+  // Contact media query
+  #contact .contact {
+    flex-direction: column;
+    padding: 100px 0;
+    align-items: center;
+    justify-content: center;
+    min-width: 20vh;
+  }
+
+  #contact .contact-items {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 20px;
+  }
+
+  #contact .contact-item {
+    margin: 20px;
+    flex-direction: row;
+  }
+
+  #contact .contact-item .icon {
+    height: 100px;
+    width: 100px;
+  }
+
+  #contact .contact-item .icon img {
+    object-fit: contain;
+  }
+
+  #contact .contact-item .contact-info {
+    width: 100%;
+    text-align: left;
+    padding-left: 20px;
+  }
+  // End Contact media query
+}
+
+// end media query for tablet
+
+// Media Query For Desktop  (>1199px)
+
+@media only screen and (min-width: 1200px) {
+ #header .hamburger{
+  display: none;
+ }
+
+ #header .nav-list ul {
+   position: initial; 
+   display: block; 
+   height: auto;
+   width: fit-content;
+   background-color: transparent;
+ }
+
+ #header .nav-list ul a:after{
+   display: none; 
+ }
+
+ #header .nav-list ul li{
+   display: inline-block
+ }
+
+ #header .nav-list ul li a{
+font-size: 1.8rem;  
+}
+
+
+  #services .service-bottom .service-item {
+    flex-basis: 22%;
+    margin: 1.5%;
+  }
+}
+
